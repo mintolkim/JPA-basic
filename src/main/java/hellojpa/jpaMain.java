@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.List;
 
 public class jpaMain {
     public static void main(String[] args){
@@ -39,8 +40,6 @@ public class jpaMain {
             Member member = new Member();
             // 테이블 대상으로 코드를 짜는 것이 아닌 객체 대상을 쿼리로 짬
             List<Member> result = em.createQuery("select m from Member as m", Member.class)
-                            .setFirstResult(5)
-                            .setMaxResults(10)
                             .getResultList();
             for (Member members : result){
                 System.out.println("member.name" + members.getName());
