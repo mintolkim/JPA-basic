@@ -37,13 +37,38 @@ public class jpaMain {
             em.remove(findMember); */
 
             // 전체 조회
+            /*
             Member member = new Member();
             // 테이블 대상으로 코드를 짜는 것이 아닌 객체 대상을 쿼리로 짬
             List<Member> result = em.createQuery("select m from Member as m", Member.class)
                             .getResultList();
             for (Member members : result){
                 System.out.println("member.name" + members.getName());
-            }
+            }*/
+
+            // 영속
+            // Member member1 = new Member(150L, "A");
+            // Member member2 = new Member(160L, "B");
+
+            // em.persist(member1);
+            // em.persist(member2);
+            // 영속성 컨텍스트에 데이터가 쌓인다
+
+            /*
+            Member member = new Member(120L, "AB");
+            // 플러시 실행
+            em.flush();
+            */
+
+            // 준영속 상태 만들기
+            /* Member member = em.find(Member.class, 150L);
+            member.setName("ZZZZ");
+            // 영속성 컨테스트에서 더이상 관리 하지 않는다
+            // 커밋할때 아무일도 일어나지 않는다.
+            em.detach(member); */
+
+
+            // commit 순간에 데이터가 데이터베이스에 커밋된다.
             tx.commit();
         } catch (Exception e){
             // 에러시 롤백
