@@ -7,23 +7,39 @@ import javax.persistence.Persistence;
 
 public class jpaMain {
     public static void main(String[] args){
-        // 애플리케이션 로딩시점에 딱 하나만 만들어야함
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
-        // entitiyManager가 꺼내지는지 확인
-        // 디비에 저장하는 트랜잭션 단위마다는 Manager를 생성해야함
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
-        // 디비를 실행하는 데 있어서는 트랜잭션이란 단위가 중요 꼭 시작하여야 에러가 나지 않음
         tx.begin();
 
         try {
 
+            Team team = new Team();
+            team.setName("TeamA");
+            em.persist(team);
+            // 영속상태는 항상 PK을 갖고 있음
+
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setTeam(team); // 수정 전 :member.setTeamId(team.getId());
+            em.persist(member);
+
+            // DB 에서 쿼리를 보고 싶다 test 할려면
+            // em.flush();
+            // em.clear();
+
+            Member findMember = em.find(Member.class, member.getId());
+            Team findTeam = findMember.getTeam(); // 수정 전 : Long findTeamId = findMember.getTeamId();
+            // 수정 전 : Team findTeam = em.find(Team.class, findTeamId);
+
+
+            Team newTeam = em.find(Team.class, 100L);
+            findMember.setTeam(newTeam);
+
             tx.commit();
         } catch (Exception e){
-            // 에러시 롤백
             tx.rollback();
         } finally {
-            // entityManager 종료 또한 중요하다.
             em.close();
         }
 
