@@ -2,6 +2,7 @@ package jpabook.jpashop;
 
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.domain.Order;
+import jpabook.jpashop.domain.OrderItem;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -28,6 +29,9 @@ public class JpaMain {
 
             // 이게 더 객체지향적
             // Member findMemeber = order.getMemeber();
+
+            Order order = new Order();
+            order.addOrderItem(new OrderItem());
 
 
             tx.commit();
