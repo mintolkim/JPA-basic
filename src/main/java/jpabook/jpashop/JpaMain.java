@@ -18,20 +18,7 @@ public class JpaMain {
         tx.begin();
 
         try {
-            // 주문했다고 예시들고
-            /* Order order = em.find(Order.class, 1L);
-            Long memeberId = order.getMemberId();
 
-            // 찾은걸 넣어서 또 찾아야함
-            // 객체지향스럽지 않다.
-            // 지금 같은 설계는 관계형 디비 쪽에 맞춰서 설계 한 것
-            em.find(Member.class ,memeberId); */
-
-            // 이게 더 객체지향적
-            // Member findMemeber = order.getMemeber();
-
-            Order order = new Order();
-            order.addOrderItem(new OrderItem());
 
 
             tx.commit();

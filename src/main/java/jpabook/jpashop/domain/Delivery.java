@@ -1,16 +1,17 @@
 package jpabook.jpashop.domain;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
-public class Member extends BaseEntity{
+public class Delivery extends BaseEntity{
     @Id
     @GeneratedValue
     private Long id;
 
-    private String name;
+    @OneToOne(mappedBy = "delivery", fetch = LAZY)
+    private Order order;
 
     private String city;
 
@@ -18,6 +19,5 @@ public class Member extends BaseEntity{
 
     private String zipcode;
 
-    @OneToMany(mappedBy = "member")
-    private List<Order> orders = new ArrayList<>();
+    private DeliveryStatus status;
 }

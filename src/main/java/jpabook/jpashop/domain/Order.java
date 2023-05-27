@@ -1,62 +1,34 @@
 package jpabook.jpashop.domain;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
-@Table(name = "OREDERS")
-public class Order {
-    @Id @GeneratedValue
-    @Column (name = "order_id")
+@Table(name = "OREDER")
+public class Order extends BaseEntity{
+    @Id
+    @GeneratedValue
+    @Column(name = "ORDER_ID")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "MEBER_ID")
     private Member member;
 
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    private LocalDateTime orderDate;
-    @Enumerated (EnumType.STRING)
-    private OrderStatus status;
+    @OneToOne(fetch = LAZY)
+    @JoinColumn(name = "DELIVERY_ID")
+    private Delivery delivery;
 
-    public Long getId() {
-        return id;
-    }
+    private LocalDate orderDate;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private OrderStatus orderStatus;
 
-    public Member getMember() {
-        return member;
-    }
-
-    public void setMember(Member member) {
-        this.member = member;
-    }
-
-    public LocalDateTime getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(LocalDateTime orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public OrderStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(OrderStatus status) {
-        this.status = status;
-    }
-
-    public void addOrderItem(OrderItem orderItem) {
-        orderItems.add(orderItem);
-        orderItem.setOrder(this);
-    }
 }
