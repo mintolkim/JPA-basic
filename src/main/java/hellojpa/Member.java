@@ -1,6 +1,12 @@
+
 package hellojpa;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Member {
@@ -8,18 +14,20 @@ public class Member {
     @GeneratedValue
     @Column(name = "MEMBER_ID")
     private Long id;
+
     @Column(name = "USERNAME")
     private String username;
+    @Embedded
+    private Address homeAddress;
 
-    // 여기서 중요
-    /* @Column(name = "TEAM_ID")
-    private Long teamId; */
+    @ElementCollection
+    @CollectionTable(name = "FAVORITE_FOOD", joinColumns = @JoinColumn(name = "MEMBER_ID"))
+    @Column(name = "FOOD_NAME")
+    private Set<String> favoriteFoods = new HashSet<>();
 
-    @ManyToOne // member 입장에선 Many team 입장에선 one
-    @JoinColumn(name = "TEAM_ID") // member 객체와 member db테이블의 fk 의 team_id 와 맵핑해야함
-    private Team team;
-    public Member() {
-    }
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "MEMBER_ID")
+    private List<AddressEntity> addresses = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -37,12 +45,38 @@ public class Member {
         this.username = username;
     }
 
-    public Team getTeam() {
-        return team;
+    public Address getHomeAddress() {
+        return homeAddress;
     }
 
-    public void changeTeam(Team team) {
-        this.team = team;
-        team.getMembers().add(this); //이 this가 내 자신 인스턴스
+    public void setHomeAddress(Address homeAddress) {
+        this.homeAddress = homeAddress;
+    }
+
+    public Set<String> getFavoriteFoods() {
+        return favoriteFoods;
+    }
+
+    public void setFavoriteFoods(Set<String> favoriteFoods) {
+        this.favoriteFoods = favoriteFoods;
+    }
+
+    public List<AddressEntity> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<AddressEntity> addresses) {
+        this.addresses = addresses;
+    }
+
+    public Member() {
+    }
+
+    public Member(Long id, String username, Address homeAddress, Set<String> favoriteFoods, List<AddressEntity> addresses) {
+        this.id = id;
+        this.username = username;
+        this.homeAddress = homeAddress;
+        this.favoriteFoods = favoriteFoods;
+        this.addresses = addresses;
     }
 }

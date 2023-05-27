@@ -14,25 +14,39 @@ public class jpaMain {
         tx.begin();
 
         try {
-            Team team = new Team();
-            team.setName("TeamA");
-            em.persist(team);
 
             Member member = new Member();
             member.setUsername("member1");
-            member.changeTeam(team);
+            member.setHomeAddress(new Address("city1","street","zipcode"));
+            member.getFavoriteFoods().add("치킨");
+            member.getFavoriteFoods().add("피자");
+            member.getFavoriteFoods().add("족발");
+
+            member.getAddresses().add(new AddressEntity("old1","street","zipcode"));
+            member.getAddresses().add(new AddressEntity("old2","street","zipcode"));
+
             em.persist(member);
 
             em.flush();
             em.clear();
 
+            System.out.println("========== START =========== ");
+            Member findMember = em.find(Member.class, member.getId());
 
-            Team findTeam = em.find(Team.class, team.getId());
-            List<Member> members = findTeam.getMembers();
+            // city1 -> newCity
+            // findMember.getHomeAddress().setCity("newCity");
+            // Address old = findMember.getHomeAddress();
+            // findMember.setHomeAddress(new Address("newCity", old.getStreet(), old.getZipcode()));
 
-            for (Member m : members){
-                System.out.println("m = " + m.getUsername());
-            }
+            // 값 컬렉션 수정 ( 이 또한 값타입이 때문에 지우고 다시 넣어야함 )
+            // 치킨 -> 한식
+            // findMember.getFavoriteFoods().remove("치킨");
+            // findMember.getFavoriteFoods().add("한식");
+
+            // equals 를 이래서 구현해야함
+            // old1 -> new City
+            //findMember.getAddresses().remove(new Address("old1","street","zipcode"));
+            //findMember.getAddresses().add(new Address("new City","street","zipcode"));
 
             tx.commit();
         } catch (Exception e){
