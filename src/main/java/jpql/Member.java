@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@NamedQuery(
+        name = "Member.findByUsername", // 관례로 entity.~ 으로 많이 쓴다.
+        query = "select m from Member m where m.username = :username"
+)
 public class Member {
     @Id
     @GeneratedValue
@@ -50,8 +54,9 @@ public class Member {
         return team;
     }
 
-    public void setTeam(Team team) {
+    public void ChangeTeam(Team team) {
         this.team = team;
+        team.getMemberList().add(this);
     }
 
     public List<Order> getOrderList() {
@@ -60,5 +65,14 @@ public class Member {
 
     public void setOrderList(List<Order> orderList) {
         this.orderList = orderList;
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", age=" + age +
+                '}';
     }
 }
